@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: customer-update-service
+  profiles:
+    active: local
+  cloud:
+    config:
+      fail-fast: true
+      uri: http://localhost:7003/config

@@ -1,0 +1,26 @@
+spring:
+  profiles:
+    include: native
+  cloud:
+    config:
+      server:
+        health:
+          enabled: true
+        prefix: /config
+server:
+   port: 7003
+---
+spring:
+  profiles: native
+  cloud:
+    config:
+      server:
+        native:
+          searchLocations: classpath:/configurationRepository, classpath:/configurationRepository/loan, classpath:/configurationRepository/user 
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    register-with-eureka: true
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/          

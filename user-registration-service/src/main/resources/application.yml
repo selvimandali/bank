@@ -1,0 +1,54 @@
+spring:
+  application:
+    name: user-registration-service
+  profiles:
+    active: local
+    
+---
+spring:
+  profiles: local
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      key-deserializer: org.apache.kafka.common.serialization.LongDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      group-id: bank-events-listener-group, 
+  jpa:
+    hibernate:
+      ddl-auto: create 
+    show-sql: true
+  datasource:
+    url: jdbc:oracle:thin:@localhost:1521:xe
+    username: "C##BANK1"
+    password: "bank00"
+    
+server:
+  port: ${PORT:7071}
+  
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    register-with-eureka: true
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+
+zuul:
+  sensitive-headers:
+  host:
+    connect-timeout-millis: 300000000
+    socket-timeout-millis: 300000000 
+  routes:
+    loan-service:
+      path: /loan/**
+      service-id: loan-service
+      strip-prefix: false 
+    customer-update-service:
+      path: /update/**
+      service-id: customer-update-service
+      strip-prefix: false 
+ribbon:
+  ReadTimeout:  300000000
+  
+jwt:
+  secret: bank123
