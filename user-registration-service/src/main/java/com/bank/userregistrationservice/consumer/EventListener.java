@@ -1,4 +1,4 @@
-package com.bank.userregistrationservice.listener;
+package com.bank.userregistrationservice.consumer;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +17,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class EventListener {
 	
-	@Autowired
 	private UserRegistrationService userRegistrationService;
 	
-	@Autowired
 	private ObjectMapper objectMapper;
 	
-	@KafkaListener(topics = {"apply-loan-events"})
+	@Autowired
+	public EventListener(UserRegistrationService userRegistrationService, ObjectMapper objectMapper) {
+		this.userRegistrationService = userRegistrationService;
+		this.objectMapper = objectMapper;
+	}
+	
+	@KafkaListener(topics = {"${topic.applyLoanTopic}"})
 	public void applyLoanEventListener(ConsumerRecord<Long, String> consumeRecord) {
 		ApplyLoanEvent applyLoanEvent;
 		try {
@@ -35,7 +39,7 @@ public class EventListener {
 		
 	}
 	
-	@KafkaListener(topics = {"update-customer-events"})
+	@KafkaListener(topics = {"${topic.updateUserTopic}"})
 	public void updateCustomerEventListener(ConsumerRecord<Long, String> consumeRecord) {
 		UpdateUserEvent updateUserEvent;
 		try {

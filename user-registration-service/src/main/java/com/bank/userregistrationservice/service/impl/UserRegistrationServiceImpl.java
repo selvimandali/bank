@@ -26,14 +26,18 @@ import com.bank.userregistrationservice.service.UserRegistrationService;
 @Service
 public class UserRegistrationServiceImpl implements UserRegistrationService {
 
-	@Autowired
 	private CustomerRepository customerRepository;
-	
-	@Autowired
+
 	private LoanRepository loanRepository;
 	
-	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired
+	public UserRegistrationServiceImpl(CustomerRepository customerRepository, LoanRepository loanRepository, BCryptPasswordEncoder passwordEncoder) {
+		this.customerRepository = customerRepository;
+		this.loanRepository = loanRepository;
+		this.passwordEncoder = passwordEncoder;
+	}
 	
 	@Override
 	public Customer registerCustomer(CustomerDTO customerDTO) throws UserRegistrationServiceException{

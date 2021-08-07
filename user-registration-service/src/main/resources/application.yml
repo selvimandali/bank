@@ -52,3 +52,7 @@ ribbon:
   
 jwt:
   secret: bank123
+
+topic:
+  updateUserTopic: "update-customer-service"
+  applyLoanTopic: "apply-loan-events"

@@ -8,6 +8,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.header.Header;
 import org.apache.kafka.common.header.internals.RecordHeader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
@@ -25,11 +26,18 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ApplyLoanEventProducer {
 	
-	@Autowired
 	private KafkaTemplate<Long, String> kafkaTemplate;
 	
-	@Autowired
 	private ObjectMapper objectMapper;
+	
+	@Value("${topic.applyLoanTopic}")
+	String applyLoanTopic;
+	
+	@Autowired
+	public ApplyLoanEventProducer(KafkaTemplate<Long, String> kafkaTemplate, ObjectMapper objectMapper) {
+		this.kafkaTemplate = kafkaTemplate;
+		this.objectMapper = objectMapper; 
+	}
 
 	public SendResult<Long, String> produceEvent(LoanDTO loanDTO) throws LoanServiceException, InterruptedException {
 		Long key=ThreadLocalRandom.current().nextLong();
@@ -41,8 +49,8 @@ public class ApplyLoanEventProducer {
 				.build();
 		try {
 			String value= objectMapper.writeValueAsString(applyLoanEvent);
-			List<Header> headers= List.of(new RecordHeader("loanr-service", loanDTO.getUsername().getBytes()));
-			ProducerRecord<Long, String> producerRecord = new ProducerRecord<Long, String>("apply-loan-events", null, key, value, headers);
+			List<Header> headers= List.of(new RecordHeader(applyLoanTopic, loanDTO.getUsername().getBytes()));
+			ProducerRecord<Long, String> producerRecord = new ProducerRecord<Long, String>(applyLoanTopic, null, key, value, headers);
 			sendResult = kafkaTemplate.send(producerRecord).get();
 		} catch (JsonProcessingException e) {
 			log.error("JsonProcessingException");

@@ -30,15 +30,20 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/loan")
 public class LoanController {
 	
-	@Autowired
 	private ApplyLoanEventProducer applyLoanEventProducer;
 	
-	private RestTemplate restTemplate = new RestTemplate();
+	private RestTemplate restTemplate;
 	
 	@Value("${customer.url}")
 	private String loanUrl;
 	
-	private String authorization="Authorization";
+	private static final String AUTHORIZATION="Authorization";
+	
+	@Autowired
+	public LoanController(ApplyLoanEventProducer applyLoanEventProducer, RestTemplate restTemplate) {
+		this.applyLoanEventProducer = applyLoanEventProducer;
+		this.restTemplate = restTemplate;
+	}
 	
 	@PostMapping("/apply")
 	public ResponseEntity<String> applyLoan(@RequestBody @Validated LoanDTO loanDTO){
@@ -53,9 +58,9 @@ public class LoanController {
 	@GetMapping("/details/{username}")
 	@HystrixCommand(fallbackMethod="loanDetailsFallBack")
 	public ResponseEntity<Object> getCustomerLoanDetails(@RequestHeader HttpHeaders requestHeaders, @PathVariable String username){
-		log.info("request->"+requestHeaders.get(authorization));
+		log.info("request->"+requestHeaders.get(AUTHORIZATION));
 		HttpHeaders headers = new HttpHeaders();
-		headers.set(authorization,requestHeaders.get(authorization).get(0));
+		headers.set(AUTHORIZATION,requestHeaders.get(AUTHORIZATION).get(0));
 		HttpEntity<Object> entity = new HttpEntity<Object>(headers);
 		ResponseEntity<Object> response  = restTemplate.exchange(loanUrl+username, HttpMethod.GET, entity, Object.class);
 		return response;

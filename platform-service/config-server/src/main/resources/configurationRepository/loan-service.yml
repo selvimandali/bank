@@ -25,4 +25,6 @@ eureka:
 
 customer:
   url: http://localhost:7071/customer/loans/        
-       
+    
+topic:
+  applyLoanTopic: "apply-loan-events"  

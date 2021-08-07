@@ -23,4 +23,5 @@ eureka:
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka/
 
- 
+topic:
+  updateUserTopic: "update-customer-service"

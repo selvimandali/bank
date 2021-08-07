@@ -10,6 +10,7 @@ import java.util.Set;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.eq;
 
+import org.apache.commons.lang.reflect.FieldUtils;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +24,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.support.SendResult;
-import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 
 import com.bank.commonapi.dto.CustomerDTO;
@@ -46,6 +46,7 @@ class LoanControllerTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
+		FieldUtils.writeField(loanController, "loanUrl", "http://localhost:7071/customer/loans/", true);
 	}
 	
 	public SendResult<Long, String> getSendResult(){

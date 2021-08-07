@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.apache.commons.lang.reflect.FieldUtils;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,6 +36,7 @@ class UpdateUserEventProducerTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
+		FieldUtils.writeField(updateUserEventProducer, "updateUserTopic", "update-customer-service", true);
 	}
 	
 	public SendResult<Long, String> getSendResult(){

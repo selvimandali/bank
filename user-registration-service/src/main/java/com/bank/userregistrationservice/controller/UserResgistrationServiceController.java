@@ -32,14 +32,18 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/customer")
 public class UserResgistrationServiceController {
 
-	@Autowired
 	private UserRegistrationService userRegistrationService;
 	
-	@Autowired
 	private AuthenticationManager authenticationManager;
 	
-	@Autowired
 	private JWTTokenUtil jwtTokenUtil;
+	
+	@Autowired
+	public UserResgistrationServiceController(UserRegistrationService userRegistrationService, AuthenticationManager authenticationManager, JWTTokenUtil jwtTokenUtil) {
+		this.userRegistrationService = userRegistrationService;
+		this.authenticationManager = authenticationManager;
+		this.jwtTokenUtil = jwtTokenUtil;
+	}
 	
 	@PostMapping("/register")
 	public ResponseEntity<String> registerCustomer(@RequestBody @Validated CustomerDTO customer){

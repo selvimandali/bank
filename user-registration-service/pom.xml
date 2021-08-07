@@ -21,7 +21,7 @@
     		<artifactId>common-api</artifactId>
     		<version>0.0.1-SNAPSHOT</version>
     		<scope>system</scope>
-    		<systemPath>C:/Users/User/Documents/workspace-sts-3.9.9.RELEASE/common-api/target/common-api-0.0.1-SNAPSHOT.jar.original</systemPath>
+    		<systemPath>C:/Users/User/Desktop/kafka-mc/bank/common-api/target/common-api-0.0.1-SNAPSHOT.jar.original</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.kafka</groupId>

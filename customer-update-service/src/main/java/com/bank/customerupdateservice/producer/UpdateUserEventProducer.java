@@ -8,6 +8,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.header.Header;
 import org.apache.kafka.common.header.internals.RecordHeader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,14 @@ public class UpdateUserEventProducer {
 	
 	@Autowired
 	private ObjectMapper objectMapper;
+	
+	@Value("${topic.updateUserTopic}")
+	String updateUserTopic;
+	
+	public UpdateUserEventProducer(KafkaTemplate<Long, String> kafkaTemplate, ObjectMapper objectMapper) {
+		this.kafkaTemplate = kafkaTemplate;
+		this.objectMapper = objectMapper;
+	}
 
 	public SendResult<Long, String> produceEvent(CustomerDTO customerDTO) throws CustomerUpdateServiceException, InterruptedException {
 		Long key=ThreadLocalRandom.current().nextLong();
@@ -40,8 +49,8 @@ public class UpdateUserEventProducer {
 				.build();
 		try {
 			String value= objectMapper.writeValueAsString(updateUserEvent);
-			List<Header> headers= List.of(new RecordHeader("update-customer-service", customerDTO.getUserName().getBytes()));
-			ProducerRecord<Long, String> producerRecord = new ProducerRecord<Long, String>("update-customer-events", null, key, value, headers);
+			List<Header> headers= List.of(new RecordHeader(updateUserTopic, customerDTO.getUserName().getBytes()));
+			ProducerRecord<Long, String> producerRecord = new ProducerRecord<Long, String>(updateUserTopic, null, key, value, headers);
 			sendResult = kafkaTemplate.send(producerRecord).get();
 		} catch (JsonProcessingException e) {
 			log.error("JsonProcessingException");

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import java.util.concurrent.ExecutionException;
 
+import org.apache.commons.lang.reflect.FieldUtils;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +37,7 @@ class ApplyLoanEventProducerTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
+		FieldUtils.writeField(applyLoanEventProducer, "applyLoanTopic", "apply-loan-events", true);
 	}
 
 	public SendResult<Long, String> getSendResult(){

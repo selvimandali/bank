@@ -19,17 +19,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
-    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
     
-    @Autowired
     private UserDetailsService userDetailsService;
     
-    @Autowired
     private JWTAuthenticationEntryPoint unauthorizedHandler;
     
-    @Autowired
     private JWTRequestFilter jwtRequestFilter;
+    
+    @Autowired
+    public WebSecurityConfig(BCryptPasswordEncoder passwordEncoder, UserDetailsService userDetailsService, JWTAuthenticationEntryPoint unauthorizedHandler, JWTRequestFilter jwtRequestFilter) {
+    	this.passwordEncoder = passwordEncoder;
+    	this.userDetailsService = userDetailsService;
+    	this.unauthorizedHandler = unauthorizedHandler;
+    	this.jwtRequestFilter = jwtRequestFilter;
+    }
     
     @Bean
     @Override
