@@ -39,7 +39,7 @@ public class ApplyLoanEventProducer {
 		this.objectMapper = objectMapper; 
 	}
 
-	public SendResult<Long, String> produceEvent(LoanDTO loanDTO) throws LoanServiceException, InterruptedException {
+	public SendResult<Long, String> produceEvent(LoanDTO loanDTO) throws LoanServiceException{
 		Long key=ThreadLocalRandom.current().nextLong();
 		SendResult<Long, String> sendResult = null;
 		ApplyLoanEvent applyLoanEvent = ApplyLoanEvent.builder()
@@ -59,8 +59,8 @@ public class ApplyLoanEventProducer {
 			log.error("ExecutionException");
 			throw new LoanServiceException(e.getMessage());
 		}catch (InterruptedException e) {
-			log.error("InterruptedException");
-			throw e;
+			Thread.currentThread().interrupt();
+			throw new LoanServiceException(e.getMessage());
 		}
 		return sendResult;
 	}

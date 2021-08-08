@@ -39,7 +39,7 @@ public class UpdateUserEventProducer {
 		this.objectMapper = objectMapper;
 	}
 
-	public SendResult<Long, String> produceEvent(CustomerDTO customerDTO) throws CustomerUpdateServiceException, InterruptedException {
+	public SendResult<Long, String> produceEvent(CustomerDTO customerDTO) throws CustomerUpdateServiceException {
 		Long key=ThreadLocalRandom.current().nextLong();
 		SendResult<Long, String> sendResult = null;
 		UpdateUserEvent updateUserEvent = UpdateUserEvent.builder()
@@ -59,8 +59,8 @@ public class UpdateUserEventProducer {
 			log.error("ExecutionException");
 			throw new CustomerUpdateServiceException(e.getMessage());
 		}catch(InterruptedException e) {
-			log.error("InterruptedException");
-			throw e;
+			Thread.currentThread().interrupt();
+			throw new CustomerUpdateServiceException(e.getMessage());
 		}catch(Exception e) {
 			throw new CustomerUpdateServiceException(e.getMessage());
 		}

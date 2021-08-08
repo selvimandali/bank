@@ -12,7 +12,7 @@ public enum EventType {
 	
 	public EventType getEventType() {
 		for(EventType event: EventType.values()) {
-			if(event.name()==description) {
+			if(event.name().equals(description)) {
 				return event;
 			}
 		}
